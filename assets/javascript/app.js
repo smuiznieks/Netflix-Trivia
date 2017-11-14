@@ -1,3 +1,5 @@
+var seconds = 10;
+var count = 0;
 var correctAnswers = 0;
 var incorrectAnswers = 0;
 var unanswered = 0;
@@ -9,7 +11,7 @@ var q1 = {
 	b: 'House of Cards',
 	c: 'Wet Hot American Summer',
 	d: 'Arrested Development',
-	//correct: (this.d)
+	answer: 'Arrested Development',
 }
 
 var q2 = {
@@ -19,7 +21,7 @@ var q2 = {
 	b: 'Lillian Jaushtupper',
 	c: 'Titus Andromedon',
 	d: 'Kimmy lives alone',
-	//correct: (this.c)
+	answer: 'Titus Andromedon',
 }
 
 var q3 = {
@@ -29,7 +31,7 @@ var q3 = {
 	b: 'Mind Control',
 	c: 'Invisibility',
 	d: 'Immortality',
-	//correct: (this.a)
+	answer: 'Super Jumping',
 }
 
 var q4 = {
@@ -39,17 +41,17 @@ var q4 = {
 	b: 'A convict',
 	c: 'A Russian assasin',
 	d: 'An undercover journalist',
-	//correct: (this.d)
+	answer: 'An undercover journalist',
 }
 
 var q5 = {
 	answered: false,
 	q: 'What religion is Matt Murdock on "Daredevil"?',
-	a: 'Jewish',
+	a: 'Catholic',
 	b: 'Protestant',
-	c: 'Catholic',
+	c: 'Jewish',
 	d: 'Atheist',
-	//correct: (this.c)
+	answer: 'Catholic',
 }
 
 var q6 = {
@@ -59,7 +61,7 @@ var q6 = {
 	b: 'lhdfdsf',
 	c: 'dksjhfk',
 	d: 'jdhfkj',
-	//correct: (this.a)
+	answer: 'hdfdsf',
 }
 
 var q7 = {
@@ -69,7 +71,7 @@ var q7 = {
 	b: 'Snow Creek',
 	c: 'Hemlock Grove',
 	d: 'Dawny Brook',
-	//correct: (this.c)
+	answer: 'Hemlock Grove',
 }
 
 var q8 = {
@@ -79,7 +81,7 @@ var q8 = {
 	b: 'Wagner Moura',
 	c: 'Diego Luna',
 	d: 'Rodrigo Santoro',
-	//correct: (this.b)
+	answer: 'Wagner Moura',
 }
 
 var q9 = {
@@ -89,7 +91,7 @@ var q9 = {
 	b: 'A BBQ commerical',
 	c: 'A role in "Halloween 13"',
 	d: 'A Go-Gurt commercial',
-	//correct: (this.d)
+	answer: 'A Go-Gurt commercial',
 }
 
 var q10 = {
@@ -99,21 +101,21 @@ var q10 = {
 	b: 'Jane and Joan',
 	c: 'Grace and Frankie',
 	d: 'Ruth and Gloria',
-	//correct: (this.c)
+	answer: 'Grace and Frankie',
 }
 
-var triviaQs = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10];
-var triviaAs = ['Arrested Development', 'Titus Andromedon', 'Super Jumping', 'An undercover journalist', 'Catholic', 'balh', 'Hemlock Grove', 'Wagner Moura', 'A Go-Gurt commercial', 'Grace and Frankie'];
-var showQ;
-var count = 0;
-var currentAnswer;
-var seconds = 30;
-var intervalId;
+//var a = $('#a');
+//var b = $('#b');
+//var c = $('#c');
+//var d = $('#d');
 
-function nextQ() {
-	$('#seconds').html(seconds);
-	seconds--;
-	count++;
+var triviaQs = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10];
+var triviaAs = ['d', 'c', 'a', 'd', 'a', 'b', 'c', 'b', 'd', 'c']
+var showQ;
+var timer;
+var userAnswer;
+
+function nextQuestion() {
 	$('.question').html(triviaQs[count].q);
 	$('#a').html(triviaQs[count].a);
 	$('#b').html(triviaQs[count].b);
@@ -121,23 +123,82 @@ function nextQ() {
 	$('#d').html(triviaQs[count].d);
 }
 
-function playTrivia() {
+function showResults() {
+	if (userAnswer === triviaAs[count]) {
+		$('.result').html('<p>' + 'You got it, dude!' + '</p>');
+		correctAnswers++;
+	}
+	else if (userAnswer !== triviaAs[count]) {
+		$('.result').html('<p>' + 'Nope! The correct answer was ' + '<strong>' + triviaQs[count].answer + '</strong>' + '. </p>');
+		incorrectAnswers++;
+	}
+	else if (seconds === 0) {
+		$('.result').html('<p>' + 'Out of time! The correct answer was ' + '<strong>' + triviaQs[count].answer + '</strong>' + '. </p>');
+	//	unanswered++;
+	}
+	count++;
+}
+
+
+
+
+function startGame() {
 	$('#startButton').hide();
-	$('.startGame').show();
-	intervalId = setInterval(decrement, 1000);
-	showQ = setInterval(nextQ, (1000 * 30));
-	$('.userGuess').on('click', function() {
+	$('.game').show();
+	playTrivia();
+}
+
+function resetTimer() {
+	seconds = 10;
+	timer = setInterval(decrement, 1000);
+}
+
+
+
+function playTrivia() {
+	if (count === 9) {
 		stop();
-		if (currentAnswer === $(this).attr('id')) {
-			$('.result').html('<p>' + 'You got it, dude!' + '</p>');
-			correctAnswers++;
-		}
-		else {
-			$('.result').html('<p>' + 'Nope! The correct answer was ' + '<strong>' + '</strong>' + '</p>');
-			incorrectAnswers++;
-		}
+	}
+	nextQuestion();
+	resetTimer();
+	$('.userGuess').on('click', function() {
+		userAnswer = $(this).attr('id');
+		stop();
+		console.log(userAnswer);
+		console.log(triviaAs[count]);
+		setTimeout(showResults, (1000 * 5));
+		
+		//if (userAnswer === triviaAs[count]) {
+			//$('.result').html('<p>' + 'You got it, dude!' + '</p>');
+			//correctAnswers++;
+			//count++;
+			//nextQuestion();
+			//resetTimer();
+		//}
+		//else {
+		//	$('.result').html('<p>' + 'Nope! The correct answer was ' + '<strong>' + triviaQs[count].answer + '</strong>' + '. </p>');
+		//	incorrectAnswers++;
+		//	count++;
+		//	nextQuestion();
+		//	resetTimer();
+		//}
 	})
 }	
+
+	//$('.game').hide();
+	//if (userAnswer === triviaAs[count]) {
+	//		$('.result').html('<p>' + 'You got it, dude!' + '</p>');
+	//		correctAnswers++;
+	//}
+	//
+	//}
+	//else if (seconds === 0){
+	//	
+	//}
+	//count++;
+	//nextQuestion();
+	//resetTimer();
+//}
 
 function decrement() {
 	$('#seconds').html(seconds);
@@ -146,17 +207,21 @@ function decrement() {
 		stop();
 		$('.timeRemaining').hide();
 		$('.abcd').hide();
-		$('.result').html('<p>' + 'Out of time! The correct answer was ' + '<strong>' + '</strong>' + '</p>');
+		$('.result').html('<p>' + 'Out of time! The correct answer was ' + '<strong>' + triviaQs[count].answer + '</strong>' + '. </p>');
 		unanswered++;
+		count++;
+		nextQuestion();
+		resetTimer();
 	}
 }
 
 function stop() {
-  clearInterval(intervalId);
+  clearInterval(showQ);
+  clearInterval(timer);
 }
 
-$('.startGame').hide();
-$('#startButton').click(playTrivia);
+$('.game').hide();
+$('#startButton').click(startGame);
 
 
 
