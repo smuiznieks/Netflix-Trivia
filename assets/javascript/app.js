@@ -1,12 +1,15 @@
-var seconds;
-var count;
-var correctAnswers;
-var incorrectAnswers;
-var unanswered;
+var seconds = 10;
+var count = 0;
+var correctAnswers = 0;
+var incorrectAnswers = 0;
+var unanswered = 0;
+var timer;
+var timerRunning = false;
+var showQ;
+var userAnswer;
 
 var q1 = {
-	//answered: false,
-	q: 'Netflix became "a hero" for producing a new season of which cult comedy series, cancelled by Fox in 2006?',
+	q: 'Netflix became a "hero" for producing a new season of which cult comedy series, cancelled by Fox in 2006?',
 	a: 'Master of None',
 	b: 'House of Cards',
 	c: 'Wet Hot American Summer',
@@ -17,7 +20,6 @@ var q1 = {
 }
 
 var q2 = {
-	//answered: false,
 	q: 'Who is Kimmy\'s talented roommate on "Unbreakable Kimmy Schmidt"?',
 	a: 'Jacqueline Voorheese',
 	b: 'Lillian Jaushtupper',
@@ -29,7 +31,6 @@ var q2 = {
 }
 
 var q3 = {
-	//answered: false,
 	q: '"Jessica Jones" gives us our first look at which character ahead of their own series coming to Netflix?',
 	a: 'Luke Cage',
 	b: 'Deadpool',
@@ -41,7 +42,6 @@ var q3 = {
 }
 
 var q4 = {
-	//answered: false,
 	q: 'In "Wet Hot American Summer: First Day of Camp," it is revealed that Lindsay is actually:',
 	a: 'An undercover cop',
 	b: 'A convict',
@@ -53,7 +53,6 @@ var q4 = {
 }
 
 var q5 = {
-	//answered: false,
 	q: 'What religion is Matt Murdock on "Daredevil"?',
 	a: 'Catholic',
 	b: 'Protestant',
@@ -65,7 +64,6 @@ var q5 = {
 }
 
 var q6 = {
-	//answered: false,
 	q: 'In "Orange Is the New Black," Piper Chapman was sentenced to serve how much time at Litchfield?',
 	a: '12 months',
 	b: '15 months',
@@ -77,7 +75,6 @@ var q6 = {
 }
 
 var q7 = {
-	//answered: false,
 	q: 'Which of D.J. Tanner\'s high school boyfriends returned in Season 1 of "Fuller House"?',
 	a: 'Michael Montfort',
 	b: 'Nelson Burkhard',
@@ -89,7 +86,6 @@ var q7 = {
 }
 
 var q8 = {
-	//answered: false,
 	q: '"Narcos" documents the life of Pablo Escabar, what country is it set in?',
 	a: 'Brazil',
 	b: 'Colombia',
@@ -101,7 +97,6 @@ var q8 = {
 }
 
 var q9 = {
-	//answered: false,
 	q: 'What is the most famous thing Dev has done as an actor on "Master of None"?', 
 	a: 'A role as a doctor',
 	b: 'A BBQ commerical',
@@ -113,7 +108,6 @@ var q9 = {
 }
 
 var q10 = {
-	//answered: false,
 	q: 'On this Netflix series, Jane Fonda and Lily Tomlin move in together when their husbands announce they\'re in love:',
 	a: 'Carol and Helen',
 	b: 'Jane and Joan',
@@ -126,9 +120,6 @@ var q10 = {
 
 var triviaQs = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10];
 var triviaAs = ['d', 'c', 'a', 'd', 'a', 'b', 'c', 'b', 'd', 'c']
-var showQ;
-var timer;
-var userAnswer;
 
 function nextQuestion() {
 	if (count === 10) {
@@ -150,7 +141,7 @@ function showResults() {
 	$('.game').hide();
 	$('.result').show();
 	if (userAnswer === triviaAs[count]) {
-		$('.result').html('<p>' + 'You got it, dude!' + '</p>');
+		$('.result').html('<p>' + '<strong>' + 'You got it, dude!' + '<strong>' + '</p>');
 		$('.result').append(triviaQs[count].correctImg);
 		correctAnswers++;
 	}
@@ -168,18 +159,14 @@ function showResults() {
 	if (count < 11) {
 		showQ = setTimeout(nextQuestion, (1000 * 5));
 	}
-	//else {
-	//	clear();
-	//	showFinal();
-	//}	
 }
 
 function startGame() {
-	count = '';
-	seconds = 10;
-	correctAnswers = 0;
-	incorrectAnswers =  0;
-	unanswered = 0;
+	//count = '';
+	//seconds = 10;
+	//correctAnswers = 0;
+	//incorrectAnswers =  0;
+	//unanswered = 0;
 	$('#startButton').hide();
 	$('.result').hide();
 	$('.final').hide();
@@ -189,15 +176,17 @@ function startGame() {
 }
 
 function resetTimer() {
-	seconds = 10;
-	timer = setInterval(decrement, 1000);
+	if (!timerRunning) {
+		timer = setInterval(countdown, 1000);
+		timerRunning = true;
+	}	
 }
 
 function playTrivia() {
 	count = 0;
 	console.log(count);
 	nextQuestion();
-	//resetTimer();
+	resetTimer();
 	$('.userGuess').on('click', function() {
 		userAnswer = $(this).attr('id');
 		stop();
@@ -208,7 +197,7 @@ function playTrivia() {
 	})
 }	
 
-function decrement() {
+function countdown() {
 	$('#seconds').html(seconds);
 	seconds--;
 	if (seconds === 0) {
@@ -225,6 +214,7 @@ function decrement() {
 
 function stop() {
 	clearInterval(timer);
+	timerRunning = false;
 }
 
 function clear() {

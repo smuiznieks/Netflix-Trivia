@@ -45,6 +45,8 @@ button {
     font-size: 20px;
     display: block;
     font-family: 'Open Sans Condensed', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 button:hover {
@@ -54,6 +56,7 @@ button:hover {
 strong {
 	font-family: 'Anton', sans-serif;
 	letter-spacing: 1px;
+	text-transform: uppercase;
 }
 
 .final, .game, .result {
