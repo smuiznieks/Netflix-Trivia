@@ -1,17 +1,19 @@
-var seconds = 10;
-var count = 0;
-var correctAnswers = 0;
-var incorrectAnswers = 0;
-var unanswered = 0;
+var seconds;
+var count;
+var correctAnswers;
+var incorrectAnswers;
+var unanswered;
 
 var q1 = {
 	answered: false,
-	q: 'Netflix became a hero for producing a new season of which cult comedy series, cancelled by Fox in 2006?',
+	q: 'Netflix became "a hero" for producing a new season of which cult comedy series, cancelled by Fox in 2006?',
 	a: 'Master of None',
 	b: 'House of Cards',
 	c: 'Wet Hot American Summer',
 	d: 'Arrested Development',
 	answer: 'Arrested Development',
+	correctImg: '<iframe src="https://giphy.com/embed/6YCelxMJo0txK" width="480" height="271" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/jJ56cJ4ZU1fTq">via GIPHY</a></p>',
+	incorrectImg: '<iframe src="https://giphy.com/embed/jJ56cJ4ZU1fTq" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/jJ56cJ4ZU1fTq">via GIPHY</a></p>',
 }
 
 var q2 = {
@@ -22,6 +24,8 @@ var q2 = {
 	c: 'Titus Andromedon',
 	d: 'Kimmy lives alone',
 	answer: 'Titus Andromedon',
+	correctImg: '<iframe src="https://giphy.com/embed/18pjPEqqIt2k8" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/comedy-drama-emmys-18pjPEqqIt2k8">via GIPHY</a></p>',
+	incorrectImg: '<iframe src="https://giphy.com/embed/3oEjHKvjqt5pssL99C" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/kimmyschmidt-unbreakable-kimmy-schmidt-uks-3oEjHKvjqt5pssL99C">via GIPHY</a></p>',
 }
 
 var q3 = {
@@ -32,6 +36,8 @@ var q3 = {
 	c: 'Invisibility',
 	d: 'Immortality',
 	answer: 'Super Jumping',
+	correctImg: '',
+	incorrectImg: '<iframe src="https://giphy.com/embed/SqtUeHelzv0Pe" width="480" height="441" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/jessica-jones-SqtUeHelzv0Pe">via GIPHY</a></p>',
 }
 
 var q4 = {
@@ -42,6 +48,8 @@ var q4 = {
 	c: 'A Russian assasin',
 	d: 'An undercover journalist',
 	answer: 'An undercover journalist',
+	correctImg: '',
+	incorrectImg: '',
 }
 
 var q5 = {
@@ -52,6 +60,8 @@ var q5 = {
 	c: 'Jewish',
 	d: 'Atheist',
 	answer: 'Catholic',
+	correctImg: '',
+	incorrectImg: '',
 }
 
 var q6 = {
@@ -62,6 +72,8 @@ var q6 = {
 	c: 'dksjhfk',
 	d: 'jdhfkj',
 	answer: 'hdfdsf',
+	correctImg: '',
+	incorrectImg: '',
 }
 
 var q7 = {
@@ -72,6 +84,8 @@ var q7 = {
 	c: 'Hemlock Grove',
 	d: 'Dawny Brook',
 	answer: 'Hemlock Grove',
+	correctImg: '',
+	incorrectImg: '',
 }
 
 var q8 = {
@@ -82,6 +96,8 @@ var q8 = {
 	c: 'Diego Luna',
 	d: 'Rodrigo Santoro',
 	answer: 'Wagner Moura',
+	correctImg: '',
+	incorrectImg: '',
 }
 
 var q9 = {
@@ -92,6 +108,8 @@ var q9 = {
 	c: 'A role in "Halloween 13"',
 	d: 'A Go-Gurt commercial',
 	answer: 'A Go-Gurt commercial',
+	correctImg: '',
+	incorrectImg: '',
 }
 
 var q10 = {
@@ -102,12 +120,9 @@ var q10 = {
 	c: 'Grace and Frankie',
 	d: 'Ruth and Gloria',
 	answer: 'Grace and Frankie',
+	correctImg: '',
+	incorrectImg: '',
 }
-
-//var a = $('#a');
-//var b = $('#b');
-//var c = $('#c');
-//var d = $('#d');
 
 var triviaQs = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10];
 var triviaAs = ['d', 'c', 'a', 'd', 'a', 'b', 'c', 'b', 'd', 'c']
@@ -116,6 +131,8 @@ var timer;
 var userAnswer;
 
 function nextQuestion() {
+	$('.game').show();
+	$('.result').hide();
 	$('.question').html(triviaQs[count].q);
 	$('#a').html(triviaQs[count].a);
 	$('#b').html(triviaQs[count].b);
@@ -124,27 +141,43 @@ function nextQuestion() {
 }
 
 function showResults() {
+	$('.game').hide();
+	$('.result').show();
 	if (userAnswer === triviaAs[count]) {
 		$('.result').html('<p>' + 'You got it, dude!' + '</p>');
+		$('.result').append(triviaQs[count].correctImg)
 		correctAnswers++;
 	}
 	else if (userAnswer !== triviaAs[count]) {
-		$('.result').html('<p>' + 'Nope! The correct answer was ' + '<strong>' + triviaQs[count].answer + '</strong>' + '. </p>');
+		$('.result').html('<p>' + 'Nope! The correct answer was ' + '<br />' + '<strong>' + triviaQs[count].answer + '</strong>' + '. </p>');
 		incorrectAnswers++;
 	}
 	else if (seconds === 0) {
 		$('.result').html('<p>' + 'Out of time! The correct answer was ' + '<strong>' + triviaQs[count].answer + '</strong>' + '. </p>');
-	//	unanswered++;
+		unanswered++;
 	}
 	count++;
+	if (count < 10) {
+		showQ = setTimeout(nextQuestion, (1000 * 2));
+	}
+	else {
+		clear();
+		showFinal();
+	}
+	
 }
 
-
-
-
 function startGame() {
+	count = '';
+	seconds = 10;
+	correctAnswers = 0;
+	incorrectAnswers =  0;
+	unanswered = 0;
 	$('#startButton').hide();
+	$('.result').hide();
+	$('.final').hide();
 	$('.game').show();
+	console.log(count);
 	playTrivia();
 }
 
@@ -153,52 +186,20 @@ function resetTimer() {
 	timer = setInterval(decrement, 1000);
 }
 
-
-
 function playTrivia() {
-	if (count === 9) {
-		stop();
-	}
+	count = 0;
+	console.log(count);
 	nextQuestion();
-	resetTimer();
+	//resetTimer();
 	$('.userGuess').on('click', function() {
 		userAnswer = $(this).attr('id');
 		stop();
 		console.log(userAnswer);
 		console.log(triviaAs[count]);
-		setTimeout(showResults, (1000 * 5));
-		
-		//if (userAnswer === triviaAs[count]) {
-			//$('.result').html('<p>' + 'You got it, dude!' + '</p>');
-			//correctAnswers++;
-			//count++;
-			//nextQuestion();
-			//resetTimer();
-		//}
-		//else {
-		//	$('.result').html('<p>' + 'Nope! The correct answer was ' + '<strong>' + triviaQs[count].answer + '</strong>' + '. </p>');
-		//	incorrectAnswers++;
-		//	count++;
-		//	nextQuestion();
-		//	resetTimer();
-		//}
+		console.log(count);
+		showResults();
 	})
 }	
-
-	//$('.game').hide();
-	//if (userAnswer === triviaAs[count]) {
-	//		$('.result').html('<p>' + 'You got it, dude!' + '</p>');
-	//		correctAnswers++;
-	//}
-	//
-	//}
-	//else if (seconds === 0){
-	//	
-	//}
-	//count++;
-	//nextQuestion();
-	//resetTimer();
-//}
 
 function decrement() {
 	$('#seconds').html(seconds);
@@ -216,13 +217,25 @@ function decrement() {
 }
 
 function stop() {
-  clearInterval(showQ);
-  clearInterval(timer);
+	clearInterval(timer);
 }
 
+function clear() {
+	clearTimeout(showQ);
+}
+
+function showFinal() {
+	$('#startButton').show();
+	$('.game').hide();
+	$('#correctAnswers').html(correctAnswers);
+	$('#incorrectAnswers').html(incorrectAnswers);
+	$('#unanswered').html(unanswered);
+	$('.final').show();
+}
+
+$('.final').hide();
 $('.game').hide();
 $('#startButton').click(startGame);
-
 
 
 
